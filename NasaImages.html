@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<title>Nasa Images</title>
+<head>
+    <link href="NasaImages.css" rel="stylesheet" type="text/css"/>
+</head>
+<body id="body">
+    Search for NASA images <br>
+<input type="text" id="SeachField" placeholder="search"/>
+<button id="searchButton">Search</button>
+<br>
+<div id="hits">Hits:</div>
+<br>
+<input type="radio" name="media" id="OnlyImages"  >
+<label for="media">Onliy images</label><br>
+
+<input type="radio" name="media" id="OnlyAudio"  > 
+<label for="media">Onliy  auidio</label><br>
+initial
+<select id="startYear" ></select>
+final
+<select id="endYear"></select>
+
+<section id = "imagesSection">
+  <div id="imagesField"></div>
+</section>
+
+<div class="loading">
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+</div>
+
+</body>
+<script type="text/javascript" src="getImages.js" ></script>  
+
