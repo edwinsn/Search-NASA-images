@@ -1,11 +1,14 @@
 let imagesLoaded = false;
-let lastImageShowed = 20;
+let lastImageShowed = 9;
 let jsonImages = {}
 const loading = document.querySelector('.loading')
-animationActive = false;
+let animationActive = false;
+let imagesField = document.getElementById("imagesField");
+let imagesSection = document.getElementById("imagesSection")
+let actualPage = 1; 
 
 const displayImages = (begin,end)=>{
-
+	hideLoading();
 	for (let img=begin;img<end;img++){
 		
 		let Htmlimg = document.createElement("img");
@@ -21,17 +24,16 @@ const displayImages = (begin,end)=>{
     
 }
 
-const getImages= async()=>{
+const getImages= async(newSearch)=>{
 	
 	//delete previous images
-	let imagesField = document.getElementById("imagesField");
-	let imagesSection = document.getElementById("imagesSection")
-	imagesSection.removeChild(imagesField);
+	if(newSearch===true){
 	
-	imagesField = document.createElement("div");
-	imagesField.id = "imagesField"
-	imagesSection.appendChild(imagesField);
-
+		imagesSection.removeChild(imagesField);
+		imagesField = document.createElement("div");
+		imagesField.id = "imagesField"
+		imagesSection.appendChild(imagesField);
+	}
 	//data to be send
 
 	let url = "https://images-api.nasa.gov/search?";
@@ -45,7 +47,13 @@ const getImages= async()=>{
 	else if(document.getElementById("OnlyAudio").checked){
 	  format = "&media_type="+"audio";
 	}
+	if(newSearch){
+		actualPage = 1
 
+	}
+	else{
+		actualPage += 1;
+	}
 	yearStarValue= document.getElementById("startYear").value;
 	yearEndValue= document.getElementById("endYear").value;
 
@@ -54,8 +62,8 @@ const getImages= async()=>{
 
 
 	//petition to the api
-	let endpoint = url+keyWord+format+yearStar+yearEnd;
-  
+	let endpoint = url+keyWord+format+yearStar+yearEnd+"&page="+actualPage;
+	
 	let response = await fetch(endpoint);
 
 	if (response.ok){
@@ -66,18 +74,13 @@ const getImages= async()=>{
 		 htmlHits.innerText = "Hits: "+jsonImages['collection']['metadata']['total_hits'];
 
 		 hits.style.display = "block";
-
-		 displayImages(0,20);
+		
+		 displayImages(0,lastImageShowed);
 		 
 	}
 	else{
 		alert("Error in the petition")
 	}
-}
-
-const showMoreImages = function(){
-	displayImages(lastImageShowed,lastImageShowed+20);
-	lastImageShowed += 20 ;
 }
 
 const createListOfYearsIn=(begin,end,id)=>{
@@ -116,6 +119,13 @@ const hideLoading = function(){
 
 }
 
+const showMoreImages = function(){
+	
+	displayImages(lastImageShowed,lastImageShowed+9);
+	lastImageShowed += 9 ;
+}
+
+
 
 createListOfYearsIn(1950,2021,"startYear");
 createListOfYearsIn(1950,2021,"endYear");
@@ -123,9 +133,15 @@ document.getElementById("searchButton").addEventListener("click",getImages);
 window.addEventListener('scroll',()=>{
 
 	const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
-	if(clientHeight+scrollTop>=scrollHeight-1){
+	if(clientHeight+scrollTop>=scrollHeight){
+
 		showLoading();
-		setTimeout(showMoreImages,500);
+		if( lastImageShowed === 99 ){
+			getImages(false);
+			lastImageShowed = 9;
+			
+		}
+		setTimeout(showMoreImages,300);
 
 	}
 	else if(animationActive && clientHeight+scrollTop<=scrollHeight-40 ){
