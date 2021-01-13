@@ -1,15 +1,17 @@
 let imagesLoaded = false;
 let lastImageShowed = 9;
-let jsonImages = {}
+let jsonImages = {};
 let animationActive = false;
-const loading = document.querySelector('.loading')
-const imagesSection = document.getElementById("imagesSection")
+const loading = document.querySelector('.loading');
+const imagesSection = document.getElementById("imagesSection");
+const searching = document.querySelector('.searching');
+const htmlHits= document.getElementById("hits");
 let imagesField = document.getElementById("imagesField");
 let actualPage = 1; 
 let pagesForLoad = 1 ;
 let resultsOver = false;
 
-const displayImages = (begin,end) =>{
+const displayImages = async(begin,end) =>{
 
 	hideLoading();
 
@@ -24,7 +26,7 @@ for (let img=begin;img<end;img++){
 			
 	try{
 			
-		console.log("showing--"+img+"--"+"beging--"+begin+"end--"+end);
+
 		let Htmlimg = document.createElement("img");
 		Htmlimg.src = jsonImages['collection']['items'][img]['links']['0']['href']
 		Htmlimg.style.width = "40%";
@@ -35,8 +37,29 @@ for (let img=begin;img<end;img++){
 		
 	}
 	catch(error){
-		//Error: audio files without link
-		console.log("Error:"+error);
+		try{
+			//audio files
+			let urlIcon = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png";
+			let Htmlaudiodiv = document.createElement("div")
+			let HtmlAudioIcon = document.createElement("img");
+			let HtmlAudioLink = document.createElement("a");
+
+			HtmlAudioIcon.src = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png"
+			HtmlAudioIcon.style.width = "50px";
+			Htmlaudiodiv.appendChild(HtmlAudioIcon);
+			
+			urlTolinks = jsonImages['collection']['items'][img]['href']
+			HtmlAudioLink.href = await getAudioLink(urlTolinks);
+
+			let title = jsonImages['collection']['items'][img]['data']['0']['title'];
+			HtmlAudioLink.appendChild(document.createTextNode(title))
+			Htmlaudiodiv.appendChild(HtmlAudioLink);
+
+			imagesField.appendChild(Htmlaudiodiv);
+		
+		}catch(error){
+			console.log(error);
+		}
 	}
 	
 }
@@ -45,11 +68,12 @@ if(end===itemsCount){
 }
 }
 
-const getImages= async(newSearch=true)=>{
+const getImages=  async(newSearch=true)=>{
 
 	//delete previous images
 	if(newSearch){
-	
+		hideHits();
+		showSearching();
 		imagesSection.removeChild(imagesField);
 		imagesField = document.createElement("div");
 		imagesField.id = "imagesField"
@@ -90,16 +114,18 @@ const getImages= async(newSearch=true)=>{
 	//petition to the api
 	let endpoint = url+keyWord+format+yearStar+yearEnd+"&page="+actualPage;
 	let response = await fetch(endpoint);
-	console.log("in get")
 	if (response.ok){
 
 		jsonImages = await response.json();
 		 totalHits = jsonImages['collection']['metadata']['total_hits'];
-		 htmlHits= document.getElementById("hits")
-		 htmlHits.innerText = "Hits: "+totalHits;
+		 showHits(totalHits);
 		 pagesForLoad = Math.ceil(totalHits/100) ;
+		 if(newSearch){
+			 hideSearching();
+		 }
 		 hits.style.display = "block";
 		 displayImages(0,9);
+		 
 	}
 	else{
 		alert("Error in the petition")
@@ -158,7 +184,30 @@ const showNomoreResults = function(){
 
 }
 
-
+const showSearching = function(){
+	searching.style.display = "block";
+}
+const hideSearching = function(){
+	searching.style.display = "none";
+}
+const showHits = function(totalHits){
+	htmlHits.innerText = "Hits: "+totalHits;
+}
+const hideHits = function(){
+	htmlHits.innerText = "";
+}
+const getAudioLink = async function(url){
+	console.log("getting the audio--"+url);
+	let response = await fetch(url);
+	
+	if(response.ok){
+		jsonAudioLinks =await response.json();
+		console.log("response!--"+jsonAudioLinks['0'])
+		return jsonAudioLinks['0'];
+	}
+	else console.log("Error en la carga del archivo de audio");
+	console.log("audio getted")
+}
 createListOfYearsIn(1950,2021,"startYear");
 createListOfYearsIn(1950,2021,"endYear");
 document.getElementById("searchButton").addEventListener("click",getImages);

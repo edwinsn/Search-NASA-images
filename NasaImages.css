@@ -1,6 +1,6 @@
 body {
-    background-image: url("https://media.istockphoto.com/vectors/abstract-background-made-from-black-dots-on-white-background-can-be-vector-id1282534949?b=1&k=6&m=1282534949&s=170667a&w=0&h=S9WPdZwgLgrFo6uAwh0RqwGvg6JqGDBvG8UbcTYg5vI=");
-    padding-bottom: 100px;
+/*    background-image: url("https://media.istockphoto.com/vectors/abstract-background-made-from-black-dots-on-white-background-can-be-vector-id1282534949?b=1&k=6&m=1282534949&s=170667a&w=0&h=S9WPdZwgLgrFo6uAwh0RqwGvg6JqGDBvG8UbcTYg5vI=");
+*/    padding-bottom: 100px;
 }
 .image{
     margin:0 auto;
@@ -33,6 +33,9 @@ body {
 }
 .ball:nth-of-type(3) {
 	animation-delay: 0.2s;
+}
+.searching{
+  display: none;
 }
 @keyframes jump {
 	0%, 100% {
