@@ -4,32 +4,43 @@
     <link href="NasaImages.css" rel="stylesheet" type="text/css"/>
 </head>
 <body id="body">
-    Search for NASA images <br>
-<input type="text" id="SeachField" placeholder="search"/>
-<button id="searchButton">Search</button>
-<br>
-<div class="searching">Searching...<br></div>
-<div id="hits">Hits:</div>
-<br>
-<input type="radio" name="media" id="OnlyImages"  >
-<label for="media">Onliy images</label><br>
+    <div class="searchDiv">
+        <p class="title">Search for NASA images</p>
+        <input type="text" class="searchinput" id="SeachField" placeholder=" search"/>
+        <button id="searchButton">Search</button>
+    </div>
 
-<input type="radio" name="media" id="OnlyAudio"  > 
-<label for="media">Onliy  audio</label><br>
-initial
-<select id="startYear" ></select>
-final
-<select id="endYear"></select>
+    <div class="searchingLabel">Searching...</div>
+    <div id="hits">Hits:</div>
 
-<section id = "imagesSection">
-  <div id="imagesField"></div>
-</section>
+    <div class="options">
+        <input type="radio" name="media" id="OnlyImages" >
+        <label for="media">Only images</label><br >
+        <input type="radio" name="media" id="OnlyAudio"  > 
+        
+        <label for="media">Only  audio</label><br>
+        <div class="">
+            initial
+            <select id="startYear" ></select><br>
+        </div>
 
-<div class="loading">
-    <div class="ball"></div>
-    <div class="ball"></div>
-    <div class="ball"></div>
-</div>
+        <div class="year">
+            final
+            <select id="endYear"></select>
+
+        </div>
+    </div>
+
+    <section id = "imagesSection">
+    <div id="imagesField"></div>
+    <p class="endOfResults">End of Results</p>
+    </section>
+
+    <div class="loading">
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+    </div>
 
 </body>
 <script type="text/javascript" src="getImages.js" ></script>  

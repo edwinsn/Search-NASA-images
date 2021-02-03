@@ -4,7 +4,7 @@ let jsonImages = {};
 let animationActive = false;
 const loading = document.querySelector('.loading');
 const imagesSection = document.getElementById("imagesSection");
-const searching = document.querySelector('.searching');
+const searching = document.querySelector('.searchingLabel');
 const htmlHits= document.getElementById("hits");
 let imagesField = document.getElementById("imagesField");
 let actualPage = 1; 
@@ -22,53 +22,54 @@ const displayImages = async(begin,end) =>{
 	
 	}
 		
-for (let img=begin;img<end;img++){
+	for (let img=begin;img<end;img++){
 			
-	try{
-			
-
-		let Htmlimg = document.createElement("img");
-		Htmlimg.src = jsonImages['collection']['items'][img]['links']['0']['href']
-		Htmlimg.style.width = "40%";
-		Htmlimg.style.margin = 0;
-		Htmlimg.classList.add="image";
-		let imagesField = document.getElementById("imagesField");
-		imagesField.appendChild(Htmlimg); 
-		
-	}
-	catch(error){
 		try{
-			//audio files
-			let urlIcon = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png";
-			let Htmlaudiodiv = document.createElement("div")
-			let HtmlAudioIcon = document.createElement("img");
-			let HtmlAudioLink = document.createElement("a");
-
-			HtmlAudioIcon.src = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png"
-			HtmlAudioIcon.style.width = "50px";
-			Htmlaudiodiv.appendChild(HtmlAudioIcon);
 			
-			urlTolinks = jsonImages['collection']['items'][img]['href']
-			HtmlAudioLink.href = await getAudioLink(urlTolinks);
 
-			let title = jsonImages['collection']['items'][img]['data']['0']['title'];
-			HtmlAudioLink.appendChild(document.createTextNode(title))
-			Htmlaudiodiv.appendChild(HtmlAudioLink);
-
-			imagesField.appendChild(Htmlaudiodiv);
-		
-		}catch(error){
-			console.log(error);
+			let Htmlimg = document.createElement("img");
+			Htmlimg.src = jsonImages['collection']['items'][img]['links']['0']['href']
+			Htmlimg.style.width = "30%";
+			Htmlimg.classList.add="image";
+			let imagesField = document.getElementById("imagesField");
+			imagesField.appendChild(Htmlimg); 
+			
 		}
+		catch(error){
+			try{
+				//audio files
+				let urlIcon = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png";
+				let Htmlaudiodiv = document.createElement("div")
+				let HtmlAudioIcon = document.createElement("img");
+				let HtmlAudioLink = document.createElement("a");
+
+				HtmlAudioIcon.src = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png"
+				HtmlAudioIcon.style.width = "50px";
+				Htmlaudiodiv.appendChild(HtmlAudioIcon);
+				
+				urlTolinks = jsonImages['collection']['items'][img]['href']
+				HtmlAudioLink.href = await getAudioLink(urlTolinks);
+
+				let title = jsonImages['collection']['items'][img]['data']['0']['title'];
+				HtmlAudioLink.appendChild(document.createTextNode(title))
+				Htmlaudiodiv.appendChild(HtmlAudioLink);
+
+				imagesField.appendChild(Htmlaudiodiv);
+			
+			}catch(error){
+				console.log(error);
+			}
+		}
+		
 	}
-	
-}
-if(end===itemsCount){
-	showNomoreResults();
-}
+	if(end===itemsCount){
+		showNomoreResults();
+	}
 }
 
 const getImages=  async(newSearch=true)=>{
+
+	hideNoMoreResults();
 
 	//delete previous images
 	if(newSearch){
@@ -77,7 +78,7 @@ const getImages=  async(newSearch=true)=>{
 		imagesSection.removeChild(imagesField);
 		imagesField = document.createElement("div");
 		imagesField.id = "imagesField"
-		imagesSection.appendChild(imagesField);
+		imagesSection.insertBefore(imagesField, document.querySelector(".endOfResults"));
 		resultsOver = false;
 		lastImageShowed = 9;
 		
@@ -132,6 +133,13 @@ const getImages=  async(newSearch=true)=>{
 	}
 }
 
+const getImagesOnEnter = (event)=>{
+
+	if(event.keyCode===13){
+		getImages();
+	}
+}
+
 const createListOfYearsIn=(begin,end,id)=>{
 
 	let selectionField = document.getElementById(id);
@@ -176,12 +184,15 @@ const showMoreImages = function(){
 
 const showNomoreResults = function(){
 
-	let endOfResultsLabel = document.createElement("p");
-	endOfResultsLabel.classList.add("endOfResults");
-	endOfResultsLabel.appendChild(document.createTextNode("End of results"));
-	imagesField.appendChild(endOfResultsLabel);
+	let endOfResultsLabel = document.querySelector(".endOfResults");
+	endOfResultsLabel.style.display="block";
 	resultsOver = true;
 
+}
+
+const hideNoMoreResults=function(){
+	let endOfResultsLabel = document.querySelector(".endOfResults");
+	endOfResultsLabel.style.display="none";
 }
 
 const showSearching = function(){
@@ -211,6 +222,8 @@ const getAudioLink = async function(url){
 createListOfYearsIn(1950,2021,"startYear");
 createListOfYearsIn(1950,2021,"endYear");
 document.getElementById("searchButton").addEventListener("click",getImages);
+document.getElementById("SeachField").addEventListener("keyup",getImagesOnEnter);
+
 window.addEventListener('scroll',()=>{
 
 	const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
