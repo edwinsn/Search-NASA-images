@@ -1,2 +1,2 @@
 # Search-NASA-images
-A web page through which you can search for images and audio from the NASA API (https://images-api.nasa.gov). The page implements an infinite scroll with javaScript and requests the API using fetch.
+A web page where you can search for images and audio from the NASA API (https://images.nasa.gov/docs/images.nasa.gov_api_docs.pdf).
