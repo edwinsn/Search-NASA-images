@@ -1,0 +1,55 @@
+.audio{
+  flex-basis: 30%;
+  text-align: center;
+}
+
+.image{
+    height: 100%;
+}
+
+.imageContainer{
+    background-color: rgba(228, 213, 213, 0.4);
+    display: flex;
+    justify-content: center;
+    height: 30vh;
+    box-sizing: border-box;
+    position: relative;
+    overflow:visible ;
+}
+
+.imageContainer >div{
+  display: none;
+  position: absolute;
+  top :100%;
+  z-index: 2;
+  background-color: white;
+  width:120%;
+  padding: 5%;
+  overflow-y: scroll;
+}
+
+.imageContainer:hover{
+    border: 1px solid black;
+}
+
+.imageContainer:hover >div{
+  display: block;
+}
+
+.imageTitle{
+  color :blue;
+}
+
+#imagesSection{
+  flex-basis: 71%;
+  flex-grow: 1;
+  overflow-y: visible;
+  box-sizing: border-box;
+  padding-bottom: 15vh;
+}
+
+#imagesField{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}

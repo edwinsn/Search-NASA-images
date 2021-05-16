@@ -2,39 +2,61 @@
 <title>Nasa Images</title>
 <head>
     <link href="NasaImages.css" rel="stylesheet" type="text/css"/>
+    <link href="options.css" rel="stylesheet" type="text/css"/>
+    <link href="loading.css" rel="stylesheet" type="text/css"/>
+    <link href="images.css"  rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" href="./favicon.ico?v=2">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+
 </head>
 <body id="body">
-    <div class="searchDiv">
-        <p class="title">Search for NASA images</p>
-        <input type="text" class="searchinput" id="SeachField" placeholder=" search"/>
-        <button id="searchButton">Search</button>
-    </div>
+
+    <form class="searchForm">
+        <div class="title">Search for NASA media</div   >
+        <div>    
+            <input type="text" class="searchinput" id="SeachField" placeholder=" search"/>
+            <input type="submit" id="searchButton" value="search"></button>
+        </div>    
+    </form>
 
     <div class="searchingLabel">Searching...</div>
     <div id="hits">Hits:</div>
 
-    <div class="options">
-        <input type="radio" name="media" id="OnlyImages" >
-        <label for="media">Only images</label><br >
-        <input type="radio" name="media" id="OnlyAudio"  > 
-        
-        <label for="media">Only  audio</label><br>
-        <div class="">
-            initial
-            <select id="startYear" ></select><br>
-        </div>
+    <div class="imagesAndOptionsContainer">
+        <form class="options">
+            <div>
+                <input type="checkbox" name="media" id="OnlyImages"/>
+                <label for="OnlyImages">Only images</label>
+            </div>
+            <div>
+                <input type="checkbox" name="media" id="OnlyAudio"/> 
+                <label for="OnlyAudio">Only  audio</label>
+            </div>
+            <div>
+                <p>Fecha inicial</p>
+                <div class="sliderContainer">
+                    <input type="range" min="1990" max="2021" value="1990" id="fechaInicial" class="slider"/>
+                    <label id="labelFechaInicial">1990</label>
+                </div>
+            </div>
 
-        <div class="year">
-            final
-            <select id="endYear"></select>
+            <div>
+                <p>Fecha final</p>
+                <div class="sliderContainer">
+                    <input type="range" min="1990" max="2021" value="2021" id="fechaFinal" class="slider"/>
+                    <label id="labelFechaFinal">2021</label>
+                </div>
+            </div>
+           
+        </form>
 
-        </div>
+        <section id = "imagesSection">
+        <div id="imagesField"></div>
+        <p class="endOfResults">End of Results</p>
+        </section>
+    
     </div>
-
-    <section id = "imagesSection">
-    <div id="imagesField"></div>
-    <p class="endOfResults">End of Results</p>
-    </section>
 
     <div class="loading">
         <div class="ball"></div>
@@ -44,4 +66,3 @@
 
 </body>
 <script type="text/javascript" src="getImages.js" ></script>  
-

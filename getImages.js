@@ -1,4 +1,3 @@
-let imagesLoaded = false;
 let lastImageShowed = 9;
 let jsonImages = {};
 let animationActive = false;
@@ -6,39 +5,62 @@ const loading = document.querySelector('.loading');
 const imagesSection = document.getElementById("imagesSection");
 const searching = document.querySelector('.searchingLabel');
 const htmlHits= document.getElementById("hits");
+let options = document.querySelector(".options")
 let imagesField = document.getElementById("imagesField");
-let actualPage = 1; 
+let actualPage = 1;
 let pagesForLoad = 1 ;
 let resultsOver = false;
+let phoneView=document.documentElement.clientWidth<550
 
 const displayImages = async(begin,end) =>{
 
 	hideLoading();
 
-	let itemsCount = Object.keys(jsonImages['collection']['items']).length;
-	if(end > itemsCount){ 
-
-		end = itemsCount;
 	
+	let itemsCount = Object.keys(jsonImages['collection']['items']).length;
+
+	if(end > itemsCount){ 
+		end = itemsCount;
 	}
-		
+
+	document.querySelector("#imagesSection").style.backgroundColor= "rgba(255, 255, 255, 0.788)";
+        
+	let imagesToInsert=[]
+
 	for (let img=begin;img<end;img++){
 			
 		try{
-			
 
 			let Htmlimg = document.createElement("img");
 			Htmlimg.src = jsonImages['collection']['items'][img]['links']['0']['href']
-			Htmlimg.style.width = "30%";
-			Htmlimg.classList.add="image";
-			let imagesField = document.getElementById("imagesField");
-			imagesField.appendChild(Htmlimg); 
-			
+			Htmlimg.classList.add("image");
+
+			let imageContainer=document.createElement("div")
+			imageContainer.appendChild(Htmlimg)
+			imageContainer.classList.add("imageContainer")
+
+			let descriptionHtml = document.createElement("p")
+			let titleHtml = document.createElement("p")
+			let infoHtml= document.createElement("div")
+			let {title, description}=jsonImages['collection']['items'][img]['data']['0']
+
+			descriptionHtml.innerText=new String(description)
+			titleHtml.innerText=new String(title)
+			titleHtml.classList.add("imageTitle")
+
+			infoHtml.appendChild(titleHtml)
+			imageContainer.appendChild(infoHtml)
+			infoHtml.appendChild(descriptionHtml)
+
+
+			imagesToInsert.push(imageContainer); 
 		}
 		catch(error){
 			try{
 				//audio files
-				let urlIcon = "https://cdn.icon-icons.com/icons2/1141/PNG/512/1486395879-audio_80621.png";
+
+				let imagesField = document.getElementById("imagesField");
+
 				let Htmlaudiodiv = document.createElement("div")
 				let HtmlAudioIcon = document.createElement("img");
 				let HtmlAudioLink = document.createElement("a");
@@ -54,11 +76,18 @@ const displayImages = async(begin,end) =>{
 				HtmlAudioLink.appendChild(document.createTextNode(title))
 				Htmlaudiodiv.appendChild(HtmlAudioLink);
 
+				Htmlaudiodiv.classList.add("audio")
 				imagesField.appendChild(Htmlaudiodiv);
 			
 			}catch(error){
 				console.log(error);
 			}
+		}
+
+		let imagesField = document.getElementById("imagesField");
+		
+		for (let i = 0; i<imagesToInsert.length;i++){
+			imagesField.appendChild(imagesToInsert[i])
 		}
 		
 	}
@@ -81,7 +110,6 @@ const getImages=  async(newSearch=true)=>{
 		imagesSection.insertBefore(imagesField, document.querySelector(".endOfResults"));
 		resultsOver = false;
 		lastImageShowed = 9;
-		
 	}
 	else{
 		pagesForLoad -= 1;
@@ -106,8 +134,8 @@ const getImages=  async(newSearch=true)=>{
 	else{
 		actualPage += 1;
 	}
-	yearStarValue= document.getElementById("startYear").value;
-	yearEndValue= document.getElementById("endYear").value;
+	yearStarValue= document.getElementById("fechaInicial").value;
+	yearEndValue= document.getElementById("fechaFinal").value;
 
 	let yearStar = yearStarValue==="1950"?"":"&year_start="+yearStarValue;
 	let yearEnd = yearEndValue==="2021"?"":"&year_end="+yearEndValue;
@@ -125,7 +153,7 @@ const getImages=  async(newSearch=true)=>{
 			 hideSearching();
 		 }
 		 hits.style.display = "block";
-		 displayImages(0,9);
+		 displayImages(0,14);
 		 
 	}
 	else{
@@ -133,12 +161,6 @@ const getImages=  async(newSearch=true)=>{
 	}
 }
 
-const getImagesOnEnter = (event)=>{
-
-	if(event.keyCode===13){
-		getImages();
-	}
-}
 
 const createListOfYearsIn=(begin,end,id)=>{
 
@@ -208,27 +230,56 @@ const hideHits = function(){
 	htmlHits.innerText = "";
 }
 const getAudioLink = async function(url){
-	console.log("getting the audio--"+url);
+	//console.log("getting the audio--"+url);
 	let response = await fetch(url);
 	
 	if(response.ok){
 		jsonAudioLinks =await response.json();
-		console.log("response!--"+jsonAudioLinks['0'])
+		//console.log("response!--"+jsonAudioLinks['0'])
 		return jsonAudioLinks['0'];
 	}
 	else console.log("Error en la carga del archivo de audio");
 	console.log("audio getted")
 }
-createListOfYearsIn(1950,2021,"startYear");
-createListOfYearsIn(1950,2021,"endYear");
-document.getElementById("searchButton").addEventListener("click",getImages);
-document.getElementById("SeachField").addEventListener("keyup",getImagesOnEnter);
 
-window.addEventListener('scroll',()=>{
+let form = document.querySelector(".searchForm")
 
-	const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+form.onsubmit= (ev)=>{
+	ev.preventDefault()
+	console.log("..")
+	getImages()
+}
+	
+//Main
+
+let fechaInicialSlider = document.getElementById("fechaInicial");
+let fechaFinalSlider = document.getElementById("fechaFinal");
+let labelFechaInicial = document.getElementById("labelFechaInicial")
+let labelFechaFinal = document.getElementById("labelFechaFinal")
+
+
+fechaInicialSlider.value=1990
+fechaFinalSlider.value=2021
+
+// Update the current slider value (each time you drag the slider handle)
+fechaFinalSlider.oninput = function(ev) {
+  labelFechaFinal.innerHTML = ev.target.value;
+}
+
+fechaInicialSlider.oninput =function(){
+  labelFechaInicial.innerHTML = this.value;
+}
+
+
+//if(phoneView)options.style.position="inline"
+//else options.style.position="fixed" 
+
+document.querySelector(".imagesAndOptionsContainer").addEventListener('scroll',()=>{
+
+	console.log("...")
+	const {scrollTop, scrollHeight, clientHeight} = document.querySelector(".imagesAndOptionsContainer");
 	if(clientHeight+scrollTop>=scrollHeight && !resultsOver){
-
+		console.log("---------")
 		showLoading();
 		if( lastImageShowed === 99 ){
 			getImages(false);
@@ -242,3 +293,19 @@ window.addEventListener('scroll',()=>{
 		hideLoading();
 	}
 })
+/*
+window.addEventListener('resize', ()=>{
+	if(document.documentElement.clientWidth<500){
+		console.log("..............")
+		console.log(options.style)
+		phoneView=true
+		options.style.position="inline"
+		options.style.border="1px solid red"
+	}else if(phoneView){
+		phoneView=false
+		console.log("----")
+		options.style,position="fixed"
+		options.style.border="1px solid green"
+		console.log(options.style)
+	}
+})*/
