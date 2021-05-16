@@ -271,9 +271,6 @@ fechaInicialSlider.oninput =function(){
 }
 
 
-//if(phoneView)options.style.position="inline"
-//else options.style.position="fixed" 
-
 document.querySelector(".imagesAndOptionsContainer").addEventListener('scroll',()=>{
 
 	console.log("...")
@@ -284,7 +281,6 @@ document.querySelector(".imagesAndOptionsContainer").addEventListener('scroll',(
 		if( lastImageShowed === 99 ){
 			getImages(false);
 			lastImageShowed = 9;
-			
 		}
 		setTimeout(showMoreImages,300);
 

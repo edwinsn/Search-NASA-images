@@ -30,6 +30,7 @@ body {
   z-index: 1;
   font-family: 'Abril Fatface', cursive;;
   font-weight: 600;
+  font-size: 17px;
   color:white;
   text-align: center;
   width: 100%;
@@ -44,7 +45,7 @@ body {
 
 .searchForm > div >*{
   height: 25%;
-  min-height: 0.7cm;
+  min-height: 0.8cm;
 }
 
 .searchinput{
