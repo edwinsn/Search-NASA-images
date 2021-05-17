@@ -10,7 +10,6 @@ let imagesField = document.getElementById("imagesField");
 let actualPage = 1;
 let pagesForLoad = 1 ;
 let resultsOver = false;
-let phoneView=document.documentElement.clientWidth<550
 
 const displayImages = async(begin,end) =>{
 
@@ -289,19 +288,3 @@ document.querySelector(".imagesAndOptionsContainer").addEventListener('scroll',(
 		hideLoading();
 	}
 })
-/*
-window.addEventListener('resize', ()=>{
-	if(document.documentElement.clientWidth<500){
-		console.log("..............")
-		console.log(options.style)
-		phoneView=true
-		options.style.position="inline"
-		options.style.border="1px solid red"
-	}else if(phoneView){
-		phoneView=false
-		console.log("----")
-		options.style,position="fixed"
-		options.style.border="1px solid green"
-		console.log(options.style)
-	}
-})*/

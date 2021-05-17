@@ -15,7 +15,6 @@
     box-sizing: border-box;
     position: relative;
     overflow:visible ;
-    border:2px solid black;
     flex-grow: 1;
 }
 
@@ -30,9 +29,6 @@
   overflow-y: scroll;
 }
 
-.imageContainer:hover{
-    border: 1px solid black;
-}
 
 .imageContainer:hover >div{
   display: block;
@@ -49,6 +45,7 @@
   overflow-x: scroll;
   box-sizing: border-box;
   padding-bottom: 15vh;
+  min-width: 6cm;
 }
 
 #imagesField{
@@ -56,5 +53,4 @@
   flex-wrap: wrap;
   flex-grow:1 ;
   flex-basis: 50%;
-  border:4px solid black;
 }
